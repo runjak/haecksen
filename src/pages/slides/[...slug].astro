@@ -87,7 +87,7 @@ const contentMap = Object.fromEntries(
     }
   };
 
-  Reveal.initialize({}).then(() => {
+  Reveal.initialize({ transition: "none" }).then(() => {
     loadState();
   });
 
@@ -95,10 +95,3 @@ const contentMap = Object.fromEntries(
   Reveal.on("overviewshown", saveState);
   Reveal.on("overviewhidden", saveState);
 </script>
-
-<!-- <style is:global>
-  body {
-    --r-background-color: #006360;
-    --r-link-color: #fff475;
-  }
-</style> -->
