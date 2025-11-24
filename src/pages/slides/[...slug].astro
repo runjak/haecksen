@@ -5,25 +5,29 @@ import "reveal.js/dist/reveal.css";
 import "reveal.js/dist/theme/black.css";
 
 export async function getStaticPaths() {
-  const slides = await getCollection("slides");
-  const slideSets = Array.from(
-    new Set(slides.map((slide) => slide.data.slideSet))
-  );
+  const slideSets = await getCollection("slideSets");
 
   return slideSets.map((slideSet) => ({
-    params: { slug: slideSet },
-    props: { slideSet },
+    params: { slug: slideSet.id },
+    props: {
+      id: slideSet.id,
+      title: slideSet.data.title,
+      description: slideSet.data.description,
+    },
   }));
 }
 
 interface Props {
-  slideSet: string;
+  id: string;
+  title: string;
+  description: string;
 }
 
-const { slideSet } = Astro.props;
+const { id: slideSet, title, description } = Astro.props;
 
-const slides = await getCollection("slides").then((slides) =>
-  slides.filter((slide) => slide.data.slideSet === slideSet)
+const slides = await getCollection(
+  "slides",
+  (slide) => slide.data.slideSet.id === slideSet
 );
 
 const contentMap = Object.fromEntries(
@@ -42,10 +46,10 @@ const contentMap = Object.fromEntries(
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="FIXME make up something" />
+    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>FIXME make up something</title>
+    <title>{title}</title>
   </head>
   <body>
     <div class="reveal">

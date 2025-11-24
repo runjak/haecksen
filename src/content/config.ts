@@ -1,4 +1,4 @@
-import { z, defineCollection } from "astro:content";
+import { z, defineCollection, reference } from "astro:content";
 
 const eventCollection = defineCollection({
   type: "content",
@@ -8,12 +8,21 @@ const eventCollection = defineCollection({
   }),
 });
 
+const slideSets = defineCollection({
+  type: "data",
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+  }),
+});
+
 const slideCollection = defineCollection({
   type: "content",
-  schema: z.object({ slideSet: z.string() }),
+  schema: z.object({ slideSet: reference("slideSets") }),
 });
 
 export const collections = {
   events: eventCollection,
+  slideSets,
   slides: slideCollection,
 };
