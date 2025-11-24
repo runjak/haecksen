@@ -1,16 +1,31 @@
 ---
+import { getCollection } from "astro:content";
 
+const events = await getCollection("events");
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <title>haecksen.runjak.codes</title>
+  </head>
+  <body>
+    <h1>haecksen.runjak.codes</h1>
+    <p>Something something haecksen 🧙‍♀️💻.</p>
+    <h2>Events</h2>
+    <dl>
+      {
+        events.map((event) => (
+          <>
+            <dt>{event.data.date.toISOString()}</dt>
+            <dd>
+              <a href={`/events/${event.slug}`}>{event.data.title}</a>
+            </dd>
+          </>
+        ))
+      }
+    </dl>
+  </body>
 </html>
