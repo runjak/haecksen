@@ -10,7 +10,7 @@ const eventCollection = defineCollection({
 
 const slideCollection = defineCollection({
   type: "content",
-  schema: z.object({ title: z.string(), slideSet: z.string() }),
+  schema: z.object({ slideSet: z.string() }),
 });
 
 export const collections = {
