@@ -4,7 +4,6 @@ const eventCollection = defineCollection({
   type: "content",
   schema: z.object({
     title: z.string(),
-    slideSets: z.array(z.string()),
   }),
 });
 
