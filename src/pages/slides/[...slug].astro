@@ -1,0 +1,104 @@
+---
+import { getCollection, type RenderResult } from "astro:content";
+
+import "reveal.js/dist/reveal.css";
+import "reveal.js/dist/theme/black.css";
+
+export async function getStaticPaths() {
+  const slides = await getCollection("slides");
+  const slideSets = Array.from(
+    new Set(slides.map((slide) => slide.data.slideSet))
+  );
+
+  return slideSets.map((slideSet) => ({
+    params: { slug: slideSet },
+    props: { slideSet },
+  }));
+}
+
+interface Props {
+  slideSet: string;
+}
+
+const { slideSet } = Astro.props;
+
+const slides = await getCollection("slides").then((slides) =>
+  slides.filter((slide) => slide.data.slideSet === slideSet)
+);
+
+const contentMap = Object.fromEntries(
+  await Promise.all(
+    slides.map(
+      async (slide): Promise<[string, RenderResult]> => [
+        slide.slug,
+        await slide.render(),
+      ]
+    )
+  )
+);
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="FIXME make up something" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>FIXME make up something</title>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        {
+          slides.map((slide) => {
+            const { Content } = contentMap[slide.slug];
+
+            return (
+              <section>
+                <Content />
+              </section>
+            );
+          })
+        }
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  import Reveal from "reveal.js";
+
+  const saveState = () => {
+    const state = Reveal.getState();
+    window.location.hash = btoa(JSON.stringify(state));
+  };
+
+  const loadState = () => {
+    try {
+      const hash = window.location.hash;
+
+      if (hash.startsWith("#")) {
+        const state = JSON.parse(atob(hash.substring(1)));
+        Reveal.setState(state);
+      }
+    } catch (e) {
+      console.error("error in loadState:", e);
+    }
+  };
+
+  Reveal.initialize({}).then(() => {
+    loadState();
+  });
+
+  Reveal.on("slidechanged", saveState);
+  Reveal.on("overviewshown", saveState);
+  Reveal.on("overviewhidden", saveState);
+</script>
+
+<!-- <style is:global>
+  body {
+    --r-background-color: #006360;
+    --r-link-color: #fff475;
+  }
+</style> -->
