@@ -1,0 +1,9 @@
+---
+type Props = { date: Date };
+
+const { date } = Astro.props;
+
+const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+---
+
+<time datetime={date.toISOString()}>{dateString}</time>

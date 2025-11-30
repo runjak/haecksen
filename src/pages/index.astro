@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import FormattedDate from "../components/FormattedDate.astro";
 
 const events = await getCollection("events");
 ---
@@ -19,7 +20,9 @@ const events = await getCollection("events");
       {
         events.map((event) => (
           <>
-            <dt>{event.data.date.toISOString()}</dt>
+            <dt>
+              <FormattedDate date={event.data.date} />
+            </dt>
             <dd>
               <a href={`/events/${event.slug}`}>{event.data.title}</a>
             </dd>
