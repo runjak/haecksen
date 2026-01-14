@@ -33,3 +33,22 @@ Start dev server:
 Build static website:
 
 `npm run build`
+
+#### Publishing
+
+The page is hosted by [grebedoc.dev](https://grebedoc.dev/)
+and publishing the page is done via a webhook configured in the codeberg repository.
+
+To publish the page push access to the `pages` branch is required.
+Pushing to this branch executes a webhook that updates the page with the data on that branch.
+
+The script `/scripts/publish.ts` takes care of updating the `pages` branch and pushing it to remote.
+
+Building and publishing are done via this command:
+
+`npm run publish`
+
+The site will become available at the following URLs:
+
+- [runjak.grebedoc.dev/haecksen](https://runjak.grebedoc.dev/haecksen/)
+- TBD: [haecksen.runjak.codes](https://haecksen.runjak.codes/)
